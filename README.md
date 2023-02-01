@@ -8,9 +8,9 @@
 ![example](https://gcdnb.pbrd.co/images/QWm9nzoQ9lk8.png?o=1)
 6. "npm i" on terminal
 7. "serverless deploy" on terminal
-8. to verify that everything is working, insert this on terminal:
+8. to verify that everything is working, insert this on terminal (dont forget to complete with the post endpoint):
 ```
-curl --location --request POST 'https://ckoecqtvhk.execute-api.us-east-1.amazonaws.com/dev/write' \
+curl --location --request POST 'https://<INSERT-POST-ENDPOINT-HERE>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "row": {"name":"gonzalo", "email":"gonzalo@email.com"}

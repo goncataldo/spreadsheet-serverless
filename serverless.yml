@@ -12,9 +12,3 @@ functions:
       - http:
           path: /write
           method: POST
-  read:
-    handler: handler.read
-    events:
-      - http:
-          path: /read
-          method: GET
