@@ -1,6 +1,4 @@
-org: gonzalinhogaucho
-app: aws-node-project
-service: spreadsheet-example
+service: spreadsheet-serverless
 
 provider:
   name: aws

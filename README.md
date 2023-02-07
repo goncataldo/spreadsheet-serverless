@@ -7,8 +7,9 @@
 7. make sure to write the row headers on the spreadsheet, example: <br>
 ![example](https://gcdnb.pbrd.co/images/QWm9nzoQ9lk8.png?o=1)
 6. "npm i" on terminal
-7. "sls offline" on terminal
-8. to verify that everything is working, insert this on terminal (dont forget to complete with the post endpoint):
+7. go to https://console.developers.google.com/apis/api/sheets.googleapis.com/overview?project=634792790969 and accept spreadsheets permission 
+8. "sls offline" on terminal
+9. to verify that everything is working, insert this on terminal (dont forget to complete with the post endpoint):
 ```
 curl --location --request POST 'https://<INSERT-POST-ENDPOINT-HERE>' \
 --header 'Content-Type: application/json' \
