@@ -1,3 +1,5 @@
+org: gonzalinhogaucho
+app: aws-node-project
 service: spreadsheet-example
 
 provider:
@@ -7,8 +9,11 @@ provider:
 
 functions:
   write:
-    handler: handler.write
+    handler: src/handler.write
     events:
       - http:
           path: /write
           method: POST
+
+plugins:
+  - serverless-offline

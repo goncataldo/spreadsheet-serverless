@@ -1,4 +1,3 @@
-'use strict';
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 const doc = new GoogleSpreadsheet(process.env.SPREADSHEET_ID);
 
@@ -13,10 +12,10 @@ module.exports.write = async event => {
   const sheet = doc.sheetsByIndex[0];
 
 
-  const row = await sheet.addRow(body.row);
-  await row.save()
+  await sheet.addRow(body.row);
 
   return formatResponse(200, { message: 'New row added'});
+  
 };
 
 function spreadsheetAuth(document) {

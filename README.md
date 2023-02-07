@@ -7,7 +7,7 @@
 7. make sure to write the row headers on the spreadsheet, example: <br>
 ![example](https://gcdnb.pbrd.co/images/QWm9nzoQ9lk8.png?o=1)
 6. "npm i" on terminal
-7. "serverless deploy" on terminal
+7. "sls offline" on terminal
 8. to verify that everything is working, insert this on terminal (dont forget to complete with the post endpoint):
 ```
 curl --location --request POST 'https://<INSERT-POST-ENDPOINT-HERE>' \
