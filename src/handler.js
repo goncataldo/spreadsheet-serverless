@@ -1,4 +1,3 @@
-
 const fs = require('fs').promises;
 const path = require('path');
 const process = require('process');
@@ -10,7 +9,7 @@ const TOKEN_PATH = path.join(process.cwd(), 'token.json');
 
 
  async function authenticate(doc) {
-  if(existsSync(TOKEN_PATH)) { //aca convierto doc en doc autenticado con el token que tengo en token_path
+  if(existsSync(TOKEN_PATH)) { 
     const content = await fs.readFile(TOKEN_PATH);
     JSON.parse(content)
     doc = content

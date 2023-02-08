@@ -4,16 +4,15 @@
 4. save the information in "client_email" and "private_key" for the .env.yml
 5. create a google spreadsheet and make it editable for the "client_email" saved from the json file and save the ID from the url.
 6. create an .env.yml like the example and complete it with the information saved from the json and the spreadsheet ID
-7. make sure to write the row headers on the spreadsheet, example: <br>
-![example](https://gcdnb.pbrd.co/images/QWm9nzoQ9lk8.png?o=1)
+7. make sure to write the row headers (name, email, company, phone) on the spreadsheet
 8. "npm i" on terminal
 9. go to https://console.developers.google.com/apis/api/sheets.googleapis.com/overview and accept spreadsheets permission 
 10. "sls offline" on terminal
 11. to verify that everything is working, insert this on terminal (dont forget to complete with the post endpoint):
 ```
-curl --location --request POST 'https://<INSERT-POST-ENDPOINT-HERE>' \
+curl --location --request POST 'http://localhost:3000/dev/write' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "row": {"name":"gonzalo", "email":"gonzalo@email.com"}
+    "row": {"company":"valtech", "phone":"1122993355", "name":"nombresito apellido", "email":"email@email.com"}
 }'
 ```
