@@ -6,10 +6,7 @@ const { existsSync } = require('fs');
 const doc = new GoogleSpreadsheet(process.env.SPREADSHEET_ID);
 const TOKEN_PATH = path.join(process.cwd(), 'token.json');
 
-
-
-
- async function authenticate(doc) {
+async function authenticate(doc) {
   if(existsSync(TOKEN_PATH)) { 
     const content = await fs.readFile(TOKEN_PATH);
     JSON.parse(content)

@@ -1,20 +1,16 @@
-const fs = require('fs').promises;
-const path = require('path');
-const process = require('process');
 const { GoogleSpreadsheet } = require('google-spreadsheet');
-const { existsSync } = require('fs');
 const doc = new GoogleSpreadsheet(process.env.SPREADSHEET_ID);
-const TOKEN_PATH = path.join(process.cwd(), 'token.json');
-
-// aws client
-/* const AWS = require('aws-sdk');
-
-const s3 = new AWS.S3({ region: 'us-east-1', signatureVersion: 'v4' }); */
-
-// local client
-	
 const { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } = require("@aws-sdk/client-s3");
 
+// aws client for deploy
+
+/* const client = new S3Client({ 
+  region: 'us-east-1', 
+  signatureVersion: 'v4' 
+});  */
+
+// local client with s3 local plugin
+	
     const client = new S3Client({
       forcePathStyle: true,
       credentials: {
@@ -23,11 +19,6 @@ const { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } = re
       },
       endpoint: "http://localhost:4569",
     });
-
-
-
-
-
 
  async function authenticate(doc) {
     try {

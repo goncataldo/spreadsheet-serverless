@@ -1,0 +1,23 @@
+service: spreadsheet-serverless
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  environment: ${file(.env.yml):}
+  s3:
+    bucketOne:
+      name: bucketsinho
+
+functions:
+  write:
+    handler: src/handler.write
+    events:
+      - s3: bucketOne
+      - http:
+          path: /write
+          method: POST
+	
+
+plugins:
+  - serverless-offline
+
