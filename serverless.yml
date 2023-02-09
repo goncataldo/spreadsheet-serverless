@@ -15,3 +15,16 @@ functions:
 
 plugins:
   - serverless-offline
+  - serverless-s3-local
+	
+custom:	
+  s3:
+    host: localhost
+    directory: /tmp
+
+resources:
+  Resources:
+    NewResource:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: local-bucket

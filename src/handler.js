@@ -6,26 +6,60 @@ const { existsSync } = require('fs');
 const doc = new GoogleSpreadsheet(process.env.SPREADSHEET_ID);
 const TOKEN_PATH = path.join(process.cwd(), 'token.json');
 
+// aws client
+/* const AWS = require('aws-sdk');
+
+const s3 = new AWS.S3({ region: 'us-east-1', signatureVersion: 'v4' }); */
+
+// local client
+	
+const { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } = require("@aws-sdk/client-s3");
+
+    const client = new S3Client({
+      forcePathStyle: true,
+      credentials: {
+        accessKeyId: "S3RVER", // This specific key is required when working offline
+        secretAccessKey: "S3RVER",
+      },
+      endpoint: "http://localhost:4569",
+    });
+
+
+
+
 
 
  async function authenticate(doc) {
-  if(existsSync(TOKEN_PATH)) { 
-    const content = await fs.readFile(TOKEN_PATH);
-    JSON.parse(content)
-    doc = content
-    console.log("using token")
-  } else {
-    spreadsheetAuth(doc)
-    const payload = JSON.stringify(doc)
-    await fs.writeFile(TOKEN_PATH, payload);
-    console.log("new token created")
-    return doc
-  }
+    try {
+        const download_bucket_params = {
+            Bucket: "local-bucket",
+            Key: "token"
+          };
+        const content = await client.send(new GetObjectCommand(download_bucket_params)); 
+        doc = content
+        console.log("using token")
+    } catch (error) {
+        console.log("no token detected, creating new one")
+        spreadsheetAuth(doc)
+        const payload = JSON.stringify(doc)
+        client
+        .send(
+          new PutObjectCommand({
+            Bucket: "local-bucket",
+            Key: "token",
+            Body: Buffer.from(payload),
+          })
+        )
+        console.log("new token created")
+        return doc
+    }
+
 }
  
 
 module.exports.write = async event => {
-  try{
+
+   try{
     if(!event.body) {
       return formatResponse(400, { message: 'body is missing' });
   } 
@@ -33,23 +67,34 @@ module.exports.write = async event => {
   const body = JSON.parse(event.body);
   
   authenticate(doc).then(()=>{
+    console.log("adding row with existing token")
     doc.loadInfo()
     .then(()=>{
       doc.sheetsByIndex[0].addRow(body.row);
     })
      .catch(()=>{
-      console.log("token expired, creating new one")
-      fs.unlink(TOKEN_PATH).then(()=>{
-        authenticate(doc).then(()=>{
-          doc.loadInfo()
-          .then(()=>{
-            doc.sheetsByIndex[0].addRow(body.row);
-          })
-        })
-      })
-    }) 
+      console.log("token expired, starting delete")
+        try{
+            const delete_object_from_bucket_params = {
+                Bucket: "local-bucket",
+                Key: "token",
+              }
+              client.send(
+                new DeleteObjectCommand(delete_object_from_bucket_params)
+            ).then(console.log("token deleted, creating a new one"))
+            .then(()=>{
+                authenticate(doc).then(()=>{
+                  doc.loadInfo()
+                  .then(()=>{
+                    doc.sheetsByIndex[0].addRow(body.row).then(console.log("New row added with new token"));
+                  })
+                })
+              })
+        } catch (error) {
+            console.log
+        }
   })
-  
+})
   return formatResponse(200, { message: 'New row added'});
   } catch (error){
     return formatResponse(400, { message: 'error'});
