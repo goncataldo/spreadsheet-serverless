@@ -54,9 +54,21 @@ module.exports.write = async event => {
     if(!event.body) {
       return formatResponse(400, { message: 'body is missing' });
   } 
-
-  const body = JSON.parse(event.body);
+  const body = JSON.parse(event.body)
   
+  const regExp1024 = /^(.{1,1024})$/;
+  const regExp255 = /^(.{1,255})$/;
+  const regExp25 = /^(.{1,25})$/;
+
+  if(!body.row) {
+    return formatResponse(400, { message: 'row object is missing' });
+
+  } else if (Object.keys(body.row).length > 5) {
+    return formatResponse(400, { message: 'too much fields' });
+
+  } else if (!body.row.company || !regExp255.test(body.row.company) || !body.row.name || !regExp255.test(body.row.name) || !body.row.phone || !regExp25.test(body.row.phone) || !body.row.email || !regExp255.test(body.row.email) || !regExp1024.test(body.row.message)) {
+    return formatResponse(400, { message: 'error in fields' });
+  } 
   authenticate(doc).then(()=>{
     console.log("adding row with existing token")
     doc.loadInfo()
@@ -88,6 +100,7 @@ module.exports.write = async event => {
 })
   return formatResponse(200, { message: 'New row added'});
   } catch (error){
+    console.log(error)
     return formatResponse(400, { message: 'error'});
   }
 };
