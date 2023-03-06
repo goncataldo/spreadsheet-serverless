@@ -1,0 +1,30 @@
+service: spreadsheet-serverless
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  environment: ${file(.env.yml):}
+
+functions:
+  write:
+    handler: src/handler.write
+    events:
+      - http:
+          path: /write
+          method: POST
+
+plugins:
+  - serverless-offline
+  - serverless-s3-local
+	
+custom:	
+  s3:
+    host: localhost
+    directory: /tmp
+
+resources:
+  Resources:
+    NewResource:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: local-bucket
